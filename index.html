@@ -1,11 +1,551 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Invitación</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reto 3 - Flores</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #fff7b8, transparent 35%),
+        radial-gradient(circle at bottom right, #c7f7d4, transparent 35%),
+        linear-gradient(135deg, #ffe8f3, #e0fff0, #dff3ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .decoracion {
+      position: fixed;
+      font-size: 42px;
+      opacity: 0.38;
+      animation: flotar 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .d1 { top: 8%; left: 8%; }
+    .d2 { top: 14%; right: 10%; animation-delay: 1s; }
+    .d3 { bottom: 12%; left: 9%; animation-delay: 2s; }
+    .d4 { bottom: 10%; right: 12%; animation-delay: 1.5s; }
+    .d5 { top: 50%; left: 4%; animation-delay: .7s; }
+    .d6 { top: 48%; right: 5%; animation-delay: 2.3s; }
+
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-16px) rotate(8deg); }
+    }
+
+    .tarjeta {
+      width: 100%;
+      max-width: 880px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 35px;
+      padding: 35px 28px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(75, 132, 87, 0.25);
+      border: 5px solid rgba(255, 255, 255, 0.9);
+      animation: aparecer 0.8s ease;
+    }
+
+    @keyframes aparecer {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .etiqueta {
+      display: inline-block;
+      background: linear-gradient(135deg, #4dd66d, #ff9ad5);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #35a951;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      color: #35b85b;
+      font-size: clamp(32px, 6vw, 55px);
+      margin-bottom: 10px;
+      text-shadow: 3px 3px 0 #d8ffd8;
+    }
+
+    .subtitulo {
+      color: #6b3d7a;
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: bold;
+      margin-bottom: 22px;
+    }
+
+    .temporizador {
+      width: 120px;
+      height: 120px;
+      margin: 10px auto 25px;
+      border-radius: 50%;
+      background: conic-gradient(#35c96f 360deg, #eeeeee 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 0 #24964e;
+      transition: background 0.3s;
+    }
+
+    .tiempo-caja {
+      width: 92px;
+      height: 92px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #35b85b;
+      font-weight: bold;
+    }
+
+    .tiempo-numero {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .tiempo-texto {
+      font-size: 13px;
+    }
+
+    .pregunta {
+      background: linear-gradient(135deg, #f0fff3, #fff2fb);
+      border: 3px dashed #65d87b;
+      border-radius: 25px;
+      padding: 25px;
+      margin: 25px 0;
+      color: #333;
+      font-size: clamp(21px, 4vw, 31px);
+      line-height: 1.4;
+      font-weight: bold;
+    }
+
+    .datos {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 22px 0;
+    }
+
+    .dato {
+      background: #e4ffe8;
+      border: 3px solid #6ee585;
+      color: #245c2f;
+      border-radius: 18px;
+      padding: 13px 18px;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #46b75a;
+    }
+
+    .jardin {
+      margin: 25px auto;
+      background: #f5fff6;
+      border: 4px solid #8ee99f;
+      border-radius: 28px;
+      padding: 22px;
+      max-width: 760px;
+    }
+
+    .letrero {
+      width: 80%;
+      margin: 0 auto 22px;
+      background: linear-gradient(135deg, #6ee585, #ff9ad5);
+      color: white;
+      padding: 12px;
+      border-radius: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #4fb45f;
+    }
+
+    .macetas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+      gap: 16px;
+    }
+
+    .maceta {
+      background: #fff5e1;
+      border-radius: 18px;
+      padding: 10px 8px 14px;
+      border: 3px solid #ffd28a;
+      box-shadow: 0 5px 0 #d49a4c;
+      animation: saltito 2.2s ease-in-out infinite;
+    }
+
+    .maceta:nth-child(even) {
+      animation-delay: .4s;
+    }
+
+    @keyframes saltito {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .flores {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+
+    .base-maceta {
+      width: 52px;
+      height: 35px;
+      background: linear-gradient(135deg, #c57938, #9d5523);
+      margin: auto;
+      border-radius: 8px 8px 18px 18px;
+      position: relative;
+      box-shadow: inset 0 -5px 0 rgba(0,0,0,0.15);
+    }
+
+    .base-maceta::before {
+      content: "";
+      position: absolute;
+      width: 65px;
+      height: 12px;
+      background: #d88a48;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 8px;
+    }
+
+    .opciones {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .opcion {
+      border: none;
+      background: linear-gradient(135deg, #55c7ff, #2c98dd);
+      color: white;
+      padding: 18px;
+      border-radius: 22px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 7px 0 #176fa6;
+      transition: 0.2s;
+    }
+
+    .opcion:hover {
+      transform: scale(1.04);
+    }
+
+    .opcion:active {
+      transform: translateY(5px);
+      box-shadow: 0 2px 0 #176fa6;
+    }
+
+    .opcion.correcta {
+      background: linear-gradient(135deg, #70e887, #28c76f);
+      box-shadow: 0 7px 0 #1c9850;
+    }
+
+    .opcion.incorrecta {
+      background: linear-gradient(135deg, #ff8080, #ff4d6d);
+      box-shadow: 0 7px 0 #c12e43;
+    }
+
+    .opcion:disabled {
+      cursor: not-allowed;
+      opacity: 0.85;
+    }
+
+    .mensaje {
+      margin-top: 25px;
+      padding: 22px;
+      border-radius: 25px;
+      font-size: clamp(21px, 4vw, 30px);
+      font-weight: bold;
+      display: none;
+      animation: respuestaAparece 0.6s ease;
+    }
+
+    .mensaje.exito {
+      display: block;
+      background: linear-gradient(135deg, #7ee8a4, #28c76f);
+      color: white;
+      box-shadow: 0 8px 0 #1c9850;
+    }
+
+    .mensaje.error {
+      display: block;
+      background: linear-gradient(135deg, #ff9898, #ff5c7a);
+      color: white;
+      box-shadow: 0 8px 0 #c12e43;
+    }
+
+    @keyframes respuestaAparece {
+      from {
+        transform: scale(0.75) rotate(-3deg);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+      }
+    }
+
+    .operacion {
+      margin-top: 12px;
+      background: rgba(255,255,255,0.28);
+      padding: 12px;
+      border-radius: 18px;
+      font-size: clamp(22px, 5vw, 36px);
+      font-weight: bold;
+    }
+
+    .boton-reiniciar {
+      display: none;
+      margin-top: 20px;
+      border: none;
+      background: linear-gradient(135deg, #ff9ad5, #ffb347);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #d66d96;
+    }
+
+    .boton-reiniciar.visible {
+      display: inline-block;
+    }
+
+    @media (max-width: 600px) {
+      .tarjeta {
+        padding: 28px 18px;
+      }
+
+      .letrero {
+        width: 100%;
+        font-size: 20px;
+      }
+
+      .dato {
+        font-size: 17px;
+      }
+
+      .opciones {
+        grid-template-columns: 1fr;
+      }
+
+      .opcion {
+        font-size: 25px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Invitación en línea</h1>
-  <p>Esta página está activa correctamente.</p>
+  <div class="decoracion d1">🌸</div>
+  <div class="decoracion d2">🌼</div>
+  <div class="decoracion d3">🪴</div>
+  <div class="decoracion d4">⭐</div>
+  <div class="decoracion d5">🎈</div>
+  <div class="decoracion d6">✨</div>
+
+  <main class="tarjeta">
+    <div class="etiqueta">Reto 3 de 8</div>
+
+    <h1>Acertijo de Flores</h1>
+
+    <p class="subtitulo">Tienes 15 segundos para responder</p>
+
+    <div class="temporizador" id="temporizador">
+      <div class="tiempo-caja">
+        <div class="tiempo-numero" id="tiempo">15</div>
+        <div class="tiempo-texto">segundos</div>
+      </div>
+    </div>
+
+    <section class="pregunta">
+      Hay <strong>16 macetas</strong> y cada una tiene <strong>4 flores</strong>.
+      <br><br>
+      ¿Cuántas flores hay en total?
+    </section>
+
+    <div class="datos">
+      <div class="dato">16 macetas</div>
+      <div class="dato">4 flores por maceta</div>
+      <div class="dato">¿Total?</div>
+    </div>
+
+    <section class="jardin">
+      <div class="letrero">JARDÍN DE FLORES</div>
+      <div class="macetas" id="macetas"></div>
+    </section>
+
+    <section class="opciones">
+      <button class="opcion" onclick="responder(this, 48)">48</button>
+      <button class="opcion" onclick="responder(this, 60)">60</button>
+      <button class="opcion" onclick="responder(this, 64)">64</button>
+      <button class="opcion" onclick="responder(this, 72)">72</button>
+    </section>
+
+    <div class="mensaje" id="mensaje"></div>
+
+    <button class="boton-reiniciar" id="reiniciar" onclick="reiniciarJuego()">
+      Intentar otra vez
+    </button>
+  </main>
+
+  <script>
+    const contenedorMacetas = document.getElementById("macetas");
+    const tiempoTexto = document.getElementById("tiempo");
+    const temporizador = document.getElementById("temporizador");
+    const mensaje = document.getElementById("mensaje");
+    const botonReiniciar = document.getElementById("reiniciar");
+    const opciones = document.querySelectorAll(".opcion");
+
+    const respuestaCorrecta = 64;
+    let tiempo = 15;
+    let juegoTerminado = false;
+    let intervalo;
+
+    for (let i = 1; i <= 16; i++) {
+      const maceta = document.createElement("div");
+      maceta.classList.add("maceta");
+
+      const flores = document.createElement("div");
+      flores.classList.add("flores");
+      flores.innerHTML = "🌸🌼🌸🌼";
+
+      const base = document.createElement("div");
+      base.classList.add("base-maceta");
+
+      maceta.appendChild(flores);
+      maceta.appendChild(base);
+      contenedorMacetas.appendChild(maceta);
+    }
+
+    function iniciarTemporizador() {
+      intervalo = setInterval(() => {
+        if (juegoTerminado) return;
+
+        tiempo--;
+        tiempoTexto.textContent = tiempo;
+
+        const grados = (tiempo / 15) * 360;
+        temporizador.style.background = `conic-gradient(#35c96f ${grados}deg, #eeeeee 0deg)`;
+
+        if (tiempo <= 5) {
+          temporizador.style.background = `conic-gradient(#ff4d6d ${grados}deg, #eeeeee 0deg)`;
+          tiempoTexto.style.color = "#ff4d6d";
+        }
+
+        if (tiempo === 0) {
+          terminarPorTiempo();
+        }
+      }, 1000);
+    }
+
+    function responder(boton, respuesta) {
+      if (juegoTerminado) return;
+
+      juegoTerminado = true;
+      clearInterval(intervalo);
+      bloquearOpciones();
+
+      if (respuesta === respuestaCorrecta) {
+        boton.classList.add("correcta");
+        mensaje.className = "mensaje exito";
+        mensaje.innerHTML = `
+          🎉 ¡Correcto! Hay <strong>64 flores</strong> en total.
+          <div class="operacion">16 × 4 = 64</div>
+        `;
+      } else {
+        boton.classList.add("incorrecta");
+        marcarCorrecta();
+        mensaje.className = "mensaje error";
+        mensaje.innerHTML = `
+          Casi lo logras. La respuesta correcta era <strong>64</strong>.
+          <div class="operacion">16 × 4 = 64</div>
+        `;
+      }
+
+      botonReiniciar.classList.add("visible");
+    }
+
+    function terminarPorTiempo() {
+      juegoTerminado = true;
+      clearInterval(intervalo);
+      bloquearOpciones();
+      marcarCorrecta();
+
+      mensaje.className = "mensaje error";
+      mensaje.innerHTML = `
+        ⏰ ¡Se acabó el tiempo! La respuesta correcta era <strong>64</strong>.
+        <div class="operacion">16 × 4 = 64</div>
+      `;
+
+      botonReiniciar.classList.add("visible");
+    }
+
+    function bloquearOpciones() {
+      opciones.forEach(opcion => {
+        opcion.disabled = true;
+      });
+    }
+
+    function marcarCorrecta() {
+      opciones.forEach(opcion => {
+        if (opcion.textContent.trim() === "64") {
+          opcion.classList.add("correcta");
+        }
+      });
+    }
+
+    function reiniciarJuego() {
+      tiempo = 15;
+      juegoTerminado = false;
+      tiempoTexto.textContent = tiempo;
+      tiempoTexto.style.color = "#35b85b";
+      temporizador.style.background = "conic-gradient(#35c96f 360deg, #eeeeee 0deg)";
+      mensaje.className = "mensaje";
+      mensaje.innerHTML = "";
+      botonReiniciar.classList.remove("visible");
+
+      opciones.forEach(opcion => {
+        opcion.disabled = false;
+        opcion.classList.remove("correcta", "incorrecta");
+      });
+
+      clearInterval(intervalo);
+      iniciarTemporizador();
+    }
+
+    iniciarTemporizador();
+  </script>
 </body>
 </html>
